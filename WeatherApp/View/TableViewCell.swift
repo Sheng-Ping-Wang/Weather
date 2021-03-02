@@ -82,13 +82,13 @@ class TableViewCell: UITableViewCell{
     }
     
     //MARK: - Set Layouts
-
+    
     override func layoutSubviews() {
         
-        picView.rightAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        picView.rightAnchor.constraint(equalTo: tempLabel.leftAnchor).isActive = true
         picView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
-        picView.widthAnchor.constraint(equalToConstant: fullSize.width).isActive = true
-        picView.heightAnchor.constraint(equalToConstant: fullSize.height).isActive = true
+        picView.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        picView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         timeLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: +10).isActive = true
         timeLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: +10).isActive = true
@@ -102,7 +102,7 @@ class TableViewCell: UITableViewCell{
         
         tempLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -10).isActive = true
         tempLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
-        tempLabel.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        tempLabel.widthAnchor.constraint(equalToConstant: 120).isActive = true
         tempLabel.heightAnchor.constraint(equalToConstant: fullSize.height).isActive = true
         
 

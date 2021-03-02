@@ -10,21 +10,32 @@ import UIKit
 class TableViewController: UITableViewController {
 
     //MARK: - Properties
-//    var tempChanged: [tempChamged] = [.c, .f]
-    var fullSize = UIScreen.main.bounds.size
-    var weatherInfo = [WeatherData]()
-    let footerView = FooterVIew()
-//    var selectedCell = UITableViewCell?
-    //MARK: - IBOutlets
     
+    var fullSize = UIScreen.main.bounds.size
+    let mainPageView = MainPageView()
+    var cities = [String]()
+    var urlAddress = ""
+    var tempUnit : swichTempUnit = .c {
+        didSet{
+            tableView.reloadData()
+        }
+    }
+    var weatherInfo = [WeatherData](){
+        didSet{
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    //MARK: - IBOutlets
     
     //MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.rowHeight = 60
         tableView.separatorColor = .clear
-        view.backgroundColor = .brown
-        setLayouts()
+        tableView.backgroundView = mainPageView
         addBtnAndLabelFunctions()
     }
     
@@ -32,38 +43,29 @@ class TableViewController: UITableViewController {
     
     func addBtnAndLabelFunctions(){
         let myViewTouch = UITapGestureRecognizer(target: self, action: #selector(viewTouch))
-        footerView.glassBtn.addTarget(self, action: #selector(popUpSearchVC), for: .touchUpInside)
-        footerView.myStackView.addGestureRecognizer(myViewTouch)
+        mainPageView.glassBtn.addTarget(self, action: #selector(popUpSearchVC), for: .touchUpInside)
+        mainPageView.labelStackView.addGestureRecognizer(myViewTouch)
     }
     
-    func getWeatherData(city: String) {
-        let address = "https://api.openweathermap.org/data/2.5/weather?q=\(city)&units=metric&appid=\(ApiKeys.apiKey)"
-        if let url = URL(string: address.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "") {
-            // GET
+    func getWeatherData() {
+        if let url = URL(string: urlAddress.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "") {
             URLSession.shared.dataTask(with: url) { (data, response, error) in
-                // 假如錯誤存在，則印出錯誤訊息（ 例如：網路斷線等等... ）
                 if let error = error {
                     print("Error: \(error.localizedDescription)")
-                  // 取得 response 和 data
                 } else if let response = response as? HTTPURLResponse,let data = data {
-                    // 將 response 轉乘 HTTPURLResponse 可以查看 statusCode 檢查錯誤（ ex: 404 可能是網址錯誤等等... ）
                     print("Status code: \(response.statusCode)")
-                    // 創建 JSONDecoder 實例來解析我們的 json 檔
                     let decoder = JSONDecoder()
-                    // decode 從 json 解碼，返回一個指定類型的值，這個類型必須符合 Decodable 協議
-                    if let weatherData = try? decoder.decode(WeatherData.self, from: data) {
+                    if let weatherData = try?
+                        decoder.decode(WeatherData.self, from: data) {
                         self.weatherInfo.append(weatherData)
-                        
                         print(self.weatherInfo)
                         print("============== Weather data ==============")
                         print("城市名稱：\(weatherData.name)")
                         print("經緯度：\(weatherData.coord.lon), \(weatherData.coord.lat)")
                         print("溫度：\(weatherData.main.temp)")
                         print("描述：\(weatherData.weather[0].weatherDescription)")
+                        print("Unix Time: \(weatherData.dt)")
                         print("============== Weather data ==============")
-                        DispatchQueue.main.async {
-                            self.tableView.reloadData()
-                        }
                     }
                 }
                 }.resume()
@@ -72,55 +74,43 @@ class TableViewController: UITableViewController {
         }
     }
     
+    //轉場
+    
     @objc func popUpSearchVC() {
         let searchVC = SearchViewController()
         searchVC.cityDelegate = self
+        searchVC.cities = cities
         let nav = UINavigationController(rootViewController: searchVC)
         present(nav, animated: true, completion: nil)
     }
     
+    //轉換溫度單位
+    
     @objc func viewTouch() {
-        if footerView.celsiusLabel.textColor == UIColor.white{
-            footerView.celsiusLabel.textColor = .gray
-            footerView.fahrenheitLabel.textColor = .white
-            
+        
+        if tempUnit == .c {
+            mainPageView.celsiusLabel.textColor = .gray
+            mainPageView.fahrenheitLabel.textColor = .white
             for i in 0..<weatherInfo.count
             {
                 weatherInfo[i].main.temp = weatherInfo[i].main.temp * 9 / 5 + 32.0
-                
             }
-            tableView.reloadData()
-            
-        }else{
-            footerView.celsiusLabel.textColor = .white
-            footerView.fahrenheitLabel.textColor = .gray
-            
-//            let numberInfo = weatherInfo.map({$0.main.temp * 9/5 + 32})
-//            weatherInfo.map({$0.main.temp}) = numberInfo
-            
+            tempUnit = .f
+        }else if tempUnit == .f {
+            mainPageView.fahrenheitLabel.textColor = .gray
+            mainPageView.celsiusLabel.textColor = .white
+            tempUnit = .c
             for i in 0..<weatherInfo.count
             {
-                weatherInfo[i].main.temp = (weatherInfo[i].main.temp - 32.0) * 5/9
+                weatherInfo[i].main.temp = (weatherInfo[i].main.temp - 32.0) * 5 / 9
             }
-            tableView.reloadData()
-            
         }
     }
 
-    
     //MARK: - Add Subviews
     
     //MARK: - Set Layouts
 
-    func setLayouts() {
-        
-        footerView.glassBtn.rightAnchor.constraint(equalTo: footerView.rightAnchor, constant: -10).isActive = true
-        footerView.glassBtn.centerYAnchor.constraint(equalTo: footerView.centerYAnchor).isActive = true
-        
-        footerView.myStackView.leftAnchor.constraint(equalTo: footerView.leftAnchor, constant: +10).isActive = true
-        footerView.myStackView.centerYAnchor.constraint(equalTo: footerView.centerYAnchor).isActive = true
-        
-    }
 
 }
 
@@ -134,48 +124,89 @@ extension TableViewController{
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.identifier)
+        let info = weatherInfo[indexPath.row]
         
         let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCell.identifier, for: indexPath) as! TableViewCell
-        cell.cityLabel.text = weatherInfo[indexPath.row].name
+        cell.backgroundColor = .clear
+        cell.selectionStyle = .none
         
-        cell.tempLabel.text = "\(weatherInfo[indexPath.row].main.temp.rounded())˚C"
+        cell.cityLabel.text = info.name
+        
+        if tempUnit == .c {
+            cell.tempLabel.text = "\(info.main.temp.rounded())˚C"
+        } else {
+            cell.tempLabel.text = "\(info.main.temp.rounded())˚F"
+        }
+        
 
-        cell.timeLabel.text = "\(weatherInfo[indexPath.row].timezone)"
+        let date = Date(timeIntervalSince1970: TimeInterval(info.dt))
+        let dateformatter = DateFormatter()
+        dateformatter.timeStyle = .short
+        let localTime = dateformatter.string(from: date as Date)
+        cell.timeLabel.text = "\(localTime)"
+        
+        if let url = URL(string: "http://openweathermap.org/img/wn/\(info.weather[0].icon).png"){
+            let data = try? Data(contentsOf: url)
+
+            if let image = data {
+                cell.picView.image = UIImage(data: image)
+            }
+        }
+        
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        return "\u{1F50D}"
-    }
+//    MARK: - FooterView
     
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return footerView
+        return mainPageView.footerView
     }
     
-//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let detailVC = DetailViewController()
-//        detailVC.transitioningDelegate = self
-//        selectedCell = tableView.cellForRow(at: indexPath) as? UITableViewCell
-//    }
-
-
+//    MARK: - DidSelect
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let detailVC = DetailViewController()
+        detailVC.transitioningDelegate = self
+        detailVC.detailView.cityLabel.text = weatherInfo[indexPath.row].name
+        if tempUnit == .c {
+            detailVC.detailView.tempLabel.text = "\(weatherInfo[indexPath.row].main.temp.rounded())˚C"
+        }else{
+            detailVC.detailView.tempLabel.text = "\(weatherInfo[indexPath.row].main.temp.rounded())˚F"
+        }
+        detailVC.weatherInfo = self.weatherInfo[indexPath.row]
+        present(detailVC, animated: true, completion: nil)
+    }
+    
+//    MARK: - Delete
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete{
+            weatherInfo.remove(at: indexPath.row)
+        }
+    }
+
 }
 
 extension TableViewController: SendCityNameDelegate{
     func sendCityName(cityName: String) {
-        getWeatherData(city: cityName)
-        tableView.reloadData()
+        if cityName.contains(",") {
+            let cityCoordinate = cityName.components(separatedBy: ", ")
+            if let longitude = Double(cityCoordinate[0]), let latitude = Double(cityCoordinate[1]){
+            urlAddress = "https://api.openweathermap.org/data/2.5/weather?lat=\(latitude)&lon=\(longitude)&units=metric&appid=\(ApiKeys.apiKey)"
+            }
+        }else if let cityID = Int(cityName){
+            urlAddress = "https://api.openweathermap.org/data/2.5/weather?id=\(cityID)&units=metric&appid=\(ApiKeys.apiKey)"
+        }else{
+            urlAddress = "https://api.openweathermap.org/data/2.5/weather?q=\(cityName)&units=metric&appid=\(ApiKeys.apiKey)"
+        }
+        
+        if cities.contains(cityName){
+        }else{
+            cities.append(cityName)
+        }
+        getWeatherData()
     }
 }
-
-//extension TableViewController {
-//
-//    enum tempChamged: CaseIterable {
-//        case c, f
-//        static var currentUnit = c
-//    }
-//}
 
 //MARK: - Animation
 
@@ -187,6 +218,14 @@ extension TableViewController: UIViewControllerTransitioningDelegate{
     
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return nil
+    }
+    
+}
+
+extension TableViewController{
+    
+    enum swichTempUnit: Int, CaseIterable {
+        case c, f
     }
     
 }
