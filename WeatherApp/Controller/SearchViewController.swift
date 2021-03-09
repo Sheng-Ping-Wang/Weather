@@ -9,17 +9,26 @@ import UIKit
 import MapKit
 
 protocol SendCityNameDelegate {
-    func sendCityName(cityName: String)
+    func getCityName(cityName: String)
+}
+
+protocol DeleteCityNameDelegate {
+    func deleteCityName(cityIndex: Int)
 }
 
 class SearchViewController: UIViewController {
 
     //MARK: - Properties
     
+    var weatherInfo = [WeatherData]()
     var searchView = SearchView()
-    var fullSize = UIScreen.main.bounds.size
-    var cities = [String]()
-    var cityDelegate: SendCityNameDelegate?
+    var cities = [String]() {
+        didSet{
+            searchView.myTableView.reloadData()
+        }
+    }
+    var sendCityNameDelegate: SendCityNameDelegate?
+    var deleteCityNamgeDelegate: DeleteCityNameDelegate?
     
     //MARK: - IBOutlets
     
@@ -27,15 +36,14 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view = searchView
         setSearchView()
         setNavBar()
-        addSubviews()
     }
     
     //MARK: - Functions
     
     func setSearchView() {
-        searchView.myTableView.backgroundColor = .black
         searchView.myTableView.delegate = self
         searchView.myTableView.dataSource = self
         searchView.myTableView.keyboardDismissMode = .onDrag
@@ -53,31 +61,56 @@ class SearchViewController: UIViewController {
     }
     
     @objc func addCity() {
-        if searchView.myTextField.text != ""{
-            cityDelegate?.sendCityName(cityName: searchView.myTextField.text!)
+        if let text = searchView.myTextField.text?.trimmingCharacters(in: .whitespaces){
+            checkRepeatCity(cityInfo: text)
+            sendCityNameDelegate?.getCityName(cityName: text)
+        }else{
+            
         }
-        dismiss(animated: true, completion: nil)
+    }
+    
+//    MARK: 判斷是否影重複城市
+    
+    func checkRepeatCity(cityInfo: String) {
+        
+        let detailVC = DetailViewController()
+        
+        if weatherInfo.isEmpty {
+            detailVC.cityInfo = cityInfo
+            detailVC.detailView.addBtn.isHidden = false
+        }else{
+//            let name = weatherInfo.map({$0.name})
+//            let id = "\(weatherInfo.map({$0.id}))"
+//            //座標無法判斷,因為經緯度包在不同陣列
+//            let coordinate = "\(weatherInfo.map({$0.coord.lon})), \(weatherInfo.map({$0.coord.lat}))"
+//            print(name)
+//            print(coordinate)
+//            if name.contains(cityInfo) || id.contains(cityInfo) || coordinate.contains(cityInfo) {
+//                detailVC.detailView.addBtn.isHidden = true
+//                print("true")
+//            }else{
+//                detailVC.detailView.addBtn.isHidden = false
+//                print("false")
+//            }
+            
+            for i in 0...weatherInfo.count-1{
+                if cityInfo == weatherInfo[i].name || cityInfo == String(weatherInfo[i].id) || cityInfo == "\(String(weatherInfo[i].coord.lon)), \( String(weatherInfo[i].coord.lat))" {
+                    detailVC.detailView.addBtn.isHidden = true
+                    break
+                }else{
+                    detailVC.detailView.addBtn.isHidden = false
+                }
+            }
+        }
+        detailVC.cityInfo = cityInfo
+        present(detailVC, animated: true, completion: nil)
     }
     
     //MARK: - Add Subviews
     
-    func addSubviews(){
-        view.addSubview(searchView.myTableView)
-    }
-    
     //MARK: - Set Layouts
 
 }
-
-//extension SearchViewController: UISearchResultsUpdating, UISearchBarDelegate {
-//    func updateSearchResults(for searchController: UISearchController) {
-//        if let searchText = searchController.searchBar.text {
-//            print(searchText)
-//        }
-//    }
-//}
-
-
 
 //MARK: - UITableViewDelegate & UITableViewDataSource
 
@@ -88,20 +121,24 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: SearchTableViewCell.searchViewIdentifier, for: indexPath) as! SearchTableViewCell
         cell.textLabel?.text = cities[indexPath.row]
-        cell.textLabel?.textColor = .red
-        cell.backgroundColor = .black
-        cell.selectionStyle = .none
         return cell
     }
 
 //    MARK: DidSelect
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        cityDelegate?.sendCityName(cityName: cities[indexPath.row])
-        dismiss(animated: true, completion: nil)
+        let city = cities[indexPath.row]
+        checkRepeatCity(cityInfo: city)
+    }
+    
+//    MARK: Delete
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            cities.remove(at: indexPath.row)
+            deleteCityNamgeDelegate?.deleteCityName(cityIndex: indexPath.row)
+        }
     }
     
 }
@@ -122,3 +159,10 @@ extension SearchViewController: UITextFieldDelegate{
         return true
     }
 }
+
+//extension String {
+//    func trimWhiteSpaces() -> String {
+//        let whiteSpaceSet = NSCharacterSet.whitespaces
+//        return self.trimmingCharacters(in: whiteSpaceSet)
+//    }
+//}

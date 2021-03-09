@@ -9,12 +9,21 @@ import UIKit
 
 class DetailView: UIView {
 
-
     //MARK: - Properties
     
     let fullSize = UIScreen.main.bounds.size
     
     //MARK: - IBOutlets
+    
+    let addBtn: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Add", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(.gray, for: .highlighted)
+        button.isHidden = true
+        return button
+    }()
     
     var cityLabel: UILabel = {
         let label = UILabel()
@@ -51,10 +60,11 @@ class DetailView: UIView {
         addSubview(cityLabel)
         addSubview(tempLabel)
         addSubview(myTableView)
+        addSubview(addBtn)
         setGradientLayer()
         
         cityLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        cityLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: +20).isActive = true
+        cityLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: +50).isActive = true
         cityLabel.widthAnchor.constraint(equalToConstant: 300).isActive = true
         cityLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
@@ -63,10 +73,15 @@ class DetailView: UIView {
         tempLabel.widthAnchor.constraint(equalToConstant: 200).isActive = true
         tempLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
-            myTableView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        myTableView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         myTableView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
         myTableView.widthAnchor.constraint(equalToConstant: fullSize.width).isActive = true
         myTableView.heightAnchor.constraint(equalToConstant: fullSize.height * 2/3).isActive = true
+        
+        addBtn.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -10).isActive = true
+        addBtn.topAnchor.constraint(equalTo: self.topAnchor, constant: +10).isActive = true
+//        addBtn.widthAnchor.constraint(equalToConstant: 200).isActive = true
+//        addBtn.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
     
     required init?(coder: NSCoder) {

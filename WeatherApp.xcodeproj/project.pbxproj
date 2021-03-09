@@ -11,7 +11,7 @@
 		464DE53425E4AEBD007476E3 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464DE53325E4AEBD007476E3 /* DetailViewController.swift */; };
 		4650ED1325DE5933007E445C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650ED1225DE5933007E445C /* AppDelegate.swift */; };
 		4650ED1525DE5933007E445C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650ED1425DE5933007E445C /* SceneDelegate.swift */; };
-		4650ED1725DE5933007E445C /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650ED1625DE5933007E445C /* TableViewController.swift */; };
+		4650ED1725DE5933007E445C /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650ED1625DE5933007E445C /* MainTableViewController.swift */; };
 		4650ED1C25DE5936007E445C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4650ED1B25DE5936007E445C /* Assets.xcassets */; };
 		4650ED1F25DE5936007E445C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4650ED1D25DE5936007E445C /* LaunchScreen.storyboard */; };
 		4650ED2925DE6736007E445C /* APIKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4650ED2825DE6736007E445C /* APIKeys.swift */; };
@@ -21,6 +21,8 @@
 		466EDECD25E5EFF3004B8F36 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 466EDECC25E5EFF3004B8F36 /* SearchView.swift */; };
 		466EDED425E62D9C004B8F36 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 466EDED325E62D9C004B8F36 /* DetailView.swift */; };
 		466EDED725E63260004B8F36 /* DetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 466EDED625E63260004B8F36 /* DetailTableViewCell.swift */; };
+		468658D225F5BFB600E87623 /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468658D125F5BFB600E87623 /* SearchTableViewCell.swift */; };
+		468658D525F5C73A00E87623 /* SwitchTempUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468658D425F5C73A00E87623 /* SwitchTempUnit.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,7 +31,7 @@
 		4650ED0F25DE5933007E445C /* WeatherApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4650ED1225DE5933007E445C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4650ED1425DE5933007E445C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		4650ED1625DE5933007E445C /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
+		4650ED1625DE5933007E445C /* MainTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
 		4650ED1B25DE5936007E445C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4650ED1E25DE5936007E445C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4650ED2025DE5936007E445C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -40,6 +42,8 @@
 		466EDECC25E5EFF3004B8F36 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		466EDED325E62D9C004B8F36 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		466EDED625E63260004B8F36 /* DetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTableViewCell.swift; sourceTree = "<group>"; };
+		468658D125F5BFB600E87623 /* SearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
+		468658D425F5C73A00E87623 /* SwitchTempUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchTempUnit.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +92,7 @@
 			children = (
 				4650ED2825DE6736007E445C /* APIKeys.swift */,
 				464B7DB925E0DFAE00C05E4A /* CityWeather.swift */,
+				468658D425F5C73A00E87623 /* SwitchTempUnit.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -98,6 +103,7 @@
 				465903E225E38A6300767CFB /* MainPageView.swift */,
 				4656BD2F25DF5ED100B5DA89 /* TableViewCell.swift */,
 				466EDECC25E5EFF3004B8F36 /* SearchView.swift */,
+				468658D125F5BFB600E87623 /* SearchTableViewCell.swift */,
 				466EDED325E62D9C004B8F36 /* DetailView.swift */,
 				466EDED625E63260004B8F36 /* DetailTableViewCell.swift */,
 			);
@@ -107,7 +113,7 @@
 		465903E925E3AF5200767CFB /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				4650ED1625DE5933007E445C /* TableViewController.swift */,
+				4650ED1625DE5933007E445C /* MainTableViewController.swift */,
 				4656BD3325DF6BAA00B5DA89 /* SearchViewController.swift */,
 				464DE53325E4AEBD007476E3 /* DetailViewController.swift */,
 				465903E525E3AF1600767CFB /* Model */,
@@ -187,11 +193,13 @@
 				4656BD3425DF6BAA00B5DA89 /* SearchViewController.swift in Sources */,
 				466EDED425E62D9C004B8F36 /* DetailView.swift in Sources */,
 				4656BD3025DF5ED100B5DA89 /* TableViewCell.swift in Sources */,
+				468658D525F5C73A00E87623 /* SwitchTempUnit.swift in Sources */,
 				466EDED725E63260004B8F36 /* DetailTableViewCell.swift in Sources */,
-				4650ED1725DE5933007E445C /* TableViewController.swift in Sources */,
+				4650ED1725DE5933007E445C /* MainTableViewController.swift in Sources */,
 				4650ED1325DE5933007E445C /* AppDelegate.swift in Sources */,
 				464B7DBA25E0DFAE00C05E4A /* CityWeather.swift in Sources */,
 				465903E325E38A6300767CFB /* MainPageView.swift in Sources */,
+				468658D225F5BFB600E87623 /* SearchTableViewCell.swift in Sources */,
 				4650ED2925DE6736007E445C /* APIKeys.swift in Sources */,
 				464DE53425E4AEBD007476E3 /* DetailViewController.swift in Sources */,
 				4650ED1525DE5933007E445C /* SceneDelegate.swift in Sources */,

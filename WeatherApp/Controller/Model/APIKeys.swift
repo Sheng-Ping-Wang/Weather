@@ -9,4 +9,7 @@ import Foundation
 
 struct ApiKeys {
     static let apiKey = "4b0bf14d9071ae86026c264dfcfe6dda"
+    static let weatherKey = "weatherInfo"
+    static let cityKey = "cities"
+    
 }

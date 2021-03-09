@@ -9,6 +9,10 @@ import Foundation
 
 // MARK: - WeatherData
 struct WeatherData: Codable {
+//    static func == (lhs: WeatherData, rhs: WeatherData) -> Bool {
+//        return lhs == rhs
+//    }
+    
     let coord: Coord
     let weather: [Weather]
     let base: String
@@ -71,3 +75,4 @@ struct Wind: Codable {
     let speed: Double
     let deg: Int
 }
+

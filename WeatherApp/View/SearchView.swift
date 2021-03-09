@@ -15,10 +15,10 @@ class SearchView: UIView {
     
     //MARK: - IBOutlets
     
-    
-    var myTableView: UITableView = {
+    lazy var myTableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.register(SearchTableViewCell.self, forCellReuseIdentifier: SearchTableViewCell.searchViewIdentifier)
         tableView.backgroundColor = .black
         return tableView
     }()
@@ -37,7 +37,7 @@ class SearchView: UIView {
     
     var addBtn: UIButton = {
        let button = UIButton()
-        button.setTitle("Add", for: .normal)
+        button.setTitle("Search", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.setTitleColor(.blue, for: .highlighted)
         button.backgroundColor = .systemBlue

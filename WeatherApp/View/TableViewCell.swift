@@ -75,6 +75,9 @@ class TableViewCell: UITableViewCell{
         contentView.addSubview(timeLabel)
         contentView.addSubview(cityLabel)
         contentView.addSubview(tempLabel)
+        
+        selectionStyle = .none
+        backgroundColor = .clear
     }
     
     required init?(coder: NSCoder) {
