@@ -184,7 +184,6 @@ extension MainTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailVC = DetailViewController()
         detailVC.detailView.addBtn.isHidden = true
-        detailVC.weatherInfo = weatherInfo[indexPath.row]
         detailVC.tempUnit = self.tempUnit
         detailVC.weatherInfo = self.weatherInfo[indexPath.row]
         present(detailVC, animated: true, completion: nil)
@@ -196,7 +195,7 @@ extension MainTableViewController {
         if editingStyle == .delete{
             weatherInfo.remove(at: indexPath.row)
             let selectedIndex = IndexPath(row: indexPath.row, section: 0)
-            tableView.deleteRows(at: [selectedIndex], with: .automatic)
+            tableView.deleteRows(at: [selectedIndex], with: .left)
         }
     }
 }

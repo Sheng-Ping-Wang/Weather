@@ -100,7 +100,7 @@ class DetailViewController: UIViewController {
                 print("Error: \(error.localizedDescription)")
             }else if let response = response as? HTTPURLResponse,let data = data {
                 DispatchQueue.main.async {
-                    if response.statusCode != 200 {
+                    if response.statusCode != 200 && response.statusCode != 401{
                         print("City not found")
                         self.detailView.cityLabel.text = "City Not Found"
                         self.detailView.addBtn.isHidden = true
@@ -121,7 +121,7 @@ class DetailViewController: UIViewController {
                     print("Unix Time: \(weatherData.dt)")
                     print("Id: \(weatherData.id)")
                     print("============== Weather data ==============")
-                    }
+                }
                 }
                 }.resume()
         } else {
